@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllUser, createUser, updateUser } = require('../service/user.service')
+const { getAllUser, createUser, updateUser, deleteUserById } = require('../service/user.service')
 const user = express.Router();
 
 user.get('/', async (req, res) => {
@@ -29,5 +29,14 @@ user.put('/:id', async (req, res) => {
     }
 })
 
+user.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await deleteUserById(id);
+        buildResponse(res, 200, data);
+    } catch (error) {
+        buildResponse(res, 404, error.message);
+    }
+});
 
 module.exports = user;
