@@ -1,5 +1,5 @@
 const routeTask = require('express').Router();
-const { getAllTasks, createTask, updateTask, getTasksId } = require('../service/task.service');
+const { getAllTasks, createTask, updateTask, getTasksId, deleteTaskById } = require('../service/task.service');
 
 routeTask.get('/', async (req, res) => {
     try {
@@ -41,6 +41,15 @@ routeTask.put('/:id', async (req, res) => {
     }
 })
 
+routeTask.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await deleteTaskById(id);
+        res.status(200).send(data);
+    } catch (er) {
+        res.status(404).send(er.message)
+    }
+})
 
 
 module.exports = routeTask;

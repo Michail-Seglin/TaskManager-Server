@@ -45,4 +45,19 @@ async function updateTaskDB(id, task, user_id) {
     }
 }
 
-module.exports = { getAllTasksDB, getTasksIdDB, createTaskDB, updateTaskDB }
+async function deleteTaskByIdDB(id) {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const sql = 'delete from task where id = $1';
+        const data = (await client.query(sql, [id])).rows;
+        return data;
+    } catch (er) {
+        await client.query('ROLLBACK');
+        console.log(`deleteTaskByIdDB: ${er.message}`);
+        return []
+    }
+}
+
+
+module.exports = { getAllTasksDB, getTasksIdDB, createTaskDB, updateTaskDB, deleteTaskByIdDB }
